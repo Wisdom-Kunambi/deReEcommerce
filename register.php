@@ -57,6 +57,7 @@ if(isset($_POST['submit'])){
             <select name="user_type">
                 <option value="user">user</option>
                 <option value="admin">admin</option>
+                <option value="driver">driver</option>
             </select>
             <input type="submit" name="submit" value="register now" class="form-btn">
             <p>already have an account? <a href="login.php">login now</a></p>
