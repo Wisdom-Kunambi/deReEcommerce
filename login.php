@@ -28,6 +28,11 @@ if(isset($_POST['submit'])){
 
         $_SESSION['user_name'] = $row['name'];
         header('location:userPage.php');
+        
+    } elseif($row['user_type'] == 'driver'){
+
+        $_SESSION['driver_name'] = $row['name'];
+        header('location:driverPage.php');
     }
 
 }else{
