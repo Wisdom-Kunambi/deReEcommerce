@@ -85,9 +85,72 @@ if(!isset($_SESSION['admin_name'])){
 
             </div>
 
-            <div id="projects" class="detail-content px-3 pt-4">
-                <h2 class="fs-5"> Projects</h2>
-                <p>some projects</p>
+            <div id="users" class="detail-content px-3 pt-4">
+            
+            <div class="container my-5">
+        <h2>List of Users</h2>
+        <a class="btn btn-primary" href="crudFiles/create.php" role="button">New User</a>
+        <br>
+      
+        <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>User Type</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $database = "user_db";
+
+        // Create connection
+        $connection = new mysqli($servername, $username, $password, $database);
+
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed: " . $connection->connect_error);
+        }
+
+        // SQL query to select user details filtered by user_type
+        $sql = "SELECT id, name, email, user_type FROM user_form WHERE user_type = 'user'";
+        $result = $connection->query($sql);
+
+        // Check if there are results
+        if ($result->num_rows > 0) {
+            // Read data of each row
+            while ($row = $result->fetch_assoc()) {
+                echo "
+                <tr>
+                    <td>" . $row["id"] . "</td>
+                    <td>" . $row["name"] . "</td>
+                    <td>" . $row["email"] . "</td>
+                    <td>" . $row["user_type"] . "</td>
+                    <td>
+                        <a class='btn btn-primary btn-sm' href='crudFiles/edit.php?id=" . $row["id"] . "' role='button'>Edit</a>
+                        <a class='btn btn-danger btn-sm' href='crudFiles/delete.php?id=" . $row["id"] . "' role='button'>Delete</a>
+                    </td>
+                </tr>
+                ";
+            }
+        } else {
+            echo "<tr><td colspan='5'>No users found</td></tr>";
+        }
+
+        // Close connection
+        $connection->close();
+        ?>
+    </tbody>
+</table>
+
+
+     </div>
+
             </div>
         </div>
     </div>
