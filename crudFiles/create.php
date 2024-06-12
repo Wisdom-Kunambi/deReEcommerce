@@ -2,14 +2,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "user_db";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "user_db";
 
-        // Create connection
-        $connection = new mysqli($servername, $username, $password, $database);
-
+// Create connection
+$connection = new mysqli($servername, $username, $password, $database);
 
 $name = "";
 $email = "";
@@ -30,9 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         }
 
+        // Hash the password using md5 (Note: For better security, use password_hash())
+        $hashed_password = md5($password);
+
         // Add new client to database
-        $sql = "INSERT INTO user_form (name, email, password, user_type)" . 
-                "VALUES ('$name', '$email', '$password', '$user_type')";
+        $sql = "INSERT INTO user_form (name, email, password, user_type) VALUES ('$name', '$email', '$hashed_password', '$user_type')";
         $result = $connection->query($sql);
         if (!$result) {
             $errorMessage = "Invalid query: " . $connection->error;
@@ -86,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="email" value="<?php echo $email; ?>">
+                    <input type="email" class="form-control" name="email" value="<?php echo $email; ?>">
                 </div>
             </div>
 
@@ -100,10 +101,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">User Type</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="user_type" value="<?php echo $user_type; ?>">
+                    <input type="text" class="form-control" name="user_type" value="<?php echo $user_type; ?>" readonly>
                 </div>
             </div>
-
 
             <?php
                 if (!empty($successMessage)) {
@@ -131,5 +131,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
          </form>
     </div>
-            </body>
+</body>
 </html>
