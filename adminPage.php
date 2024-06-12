@@ -89,7 +89,7 @@ if(!isset($_SESSION['admin_name'])){
             
             <div class="container my-5">
         <h2>List of Users</h2>
-        <a class="btn btn-primary" href="crudFiles/create.php" role="button">New User</a>
+        <a class="btn btn-success" href="crudFiles/create.php" role="button">New User</a>
         <br>
       
         <table class="table">
@@ -102,7 +102,7 @@ if(!isset($_SESSION['admin_name'])){
             <th>Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="userTable">
         <?php
         $servername = "localhost";
         $username = "root";
@@ -132,8 +132,8 @@ if(!isset($_SESSION['admin_name'])){
                     <td>" . $row["email"] . "</td>
                     <td>" . $row["user_type"] . "</td>
                     <td>
-                        <a class='btn btn-primary btn-sm' href='crudFiles/edit.php?id=" . $row["id"] . "' role='button'>Edit</a>
-                        <a class='btn btn-danger btn-sm' href='crudFiles/delete.php?id=" . $row["id"] . "' role='button'>Delete</a>
+                        <a class='btn btn-success btn-sm' href='crudFiles/edit.php?id=" . $row["id"] . "' role='button'>Edit</a>
+                        <a class='btn btn-danger btn-sm' role='button' onclick='deleteUser({$row["id"]})'>Delete</a>
                     </td>
                 </tr>
                 ";
@@ -147,6 +147,26 @@ if(!isset($_SESSION['admin_name'])){
         ?>
     </tbody>
 </table>
+
+<script>
+function deleteUser(id) {
+    if (confirm('Are you sure you want to delete this user?')) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `crudFiles/delete.php?id=${id}`, true);
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText.trim() === "success") {
+                const row = document.getElementById(`row-${id}`);
+                if (row) {
+                    row.parentNode.removeChild(row);
+                }
+            } else {
+                alert('Error deleting user');
+            }
+        };
+        xhr.send();
+    }
+}
+</script>
 
 
      </div>
