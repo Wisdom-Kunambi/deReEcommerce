@@ -261,7 +261,7 @@ if (!isset($_SESSION['admin_name'])) {
 
             <?php
 
-@include 'config.php';
+@include 'configProduct.php';
 
 if(isset($_POST['add_product'])){
 
@@ -357,8 +357,8 @@ if(isset($message)){
             <td><?php echo $row['name']; ?></td>
             <td>$<?php echo $row['price']; ?>/-</td>
             <td>
-               <a href="admin_update.php?edit=<?php echo $row['id']; ?>" class="btnProduct"> <i class="fas fa-edit"></i> edit </a>
-               <a href="admin_page.php?delete=<?php echo $row['id']; ?>" class="btnProduct"> <i class="fas fa-trash"></i> delete </a>
+               <a href="crudFiles/forProduct/updateProduct.php?edit=<?php echo $row['id']; ?>" class="btnProduct"> <i class="fas fa-edit"></i> edit </a>
+               <a href="adminPage.php?delete=<?php echo $row['id']; ?>" class="btnProduct"> <i class="fas fa-trash"></i> delete </a>
             </td>
          </tr>
       <?php } ?>
