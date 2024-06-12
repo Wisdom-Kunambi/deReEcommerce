@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "myshop";
+$database = "user_db";
 
 // Create connection
 $connection = new mysqli($servername, $username, $password, $database);
@@ -10,8 +10,6 @@ $connection = new mysqli($servername, $username, $password, $database);
 $id = "";
 $name = "";
 $email = "";
-$phone = "";
-$address = "";
 
 $errorMessage = "";
 $successMessage = "";
@@ -19,24 +17,22 @@ $successMessage = "";
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Get method: show the data of the client
     if (!isset($_GET["id"])) {
-        header("location: /myshop/index.php");
+        header("location: ../adminPage.php");
         exit;
     }  
 
     $id = $_GET["id"];
     // read the row of the selected client from database table
-    $sql = "SELECT * FROM clients WHERE id=$id";
+    $sql = "SELECT * FROM user_form WHERE id=$id";
     $result = $connection->query($sql);
     $row = $result->fetch_assoc();
 
     if (!$row) {
-        header("location: /myshop/index.php");
+        header("location: ../adminPage.php");
         exit;
     }
     $name = $row["name"];
     $email = $row["email"];
-    $phone = $row["phone"];
-    $address = $row["address"];
 }
 else {
     // Post method: update the data of the client
@@ -44,21 +40,17 @@ else {
     $id = $_POST["id"];
     $name = $_POST["name"];
     $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $address = $_POST["address"];
 
     do {
-        if (empty($id) || empty($name) || empty($email) || empty($phone) || empty($address)) {
+        if (empty($id) || empty($name) || empty($email)) {
             $errorMessage = "All the fields are required";
             break;
         }
 
         // Update the client
-        $sql = "UPDATE clients SET
+        $sql = "UPDATE user_form SET
             name = '$name',
-            email = '$email',
-            phone = '$phone',
-            address = '$address'
+            email = '$email'
             WHERE id = $id";
         $result = $connection->query($sql);
 
@@ -69,7 +61,7 @@ else {
 
         $successMessage = "Client updated correctly";
 
-        header("location: /myshop/index.php");
+        header("location: ../adminPage.php");
         exit;
 
     } while (true);
@@ -116,20 +108,6 @@ else {
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Phone</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" name="phone" value="<?php echo $phone; ?>">
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Address</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" name="address" value="<?php echo $address; ?>">
-                </div>
-            </div>
-
             <?php
                 if (!empty($successMessage)) {
                     echo "
@@ -151,7 +129,7 @@ else {
                     <button class="btn btn-primary">Submit</button>
                 </div>
                 <div class="col-sm-3 d-grid">
-                    <a href="/myshop/index.php" class="btn btn-outline-primary" role="button">Cancel</a>
+                    <a href="../adminPage.php" class="btn btn-outline-primary" role="button">Cancel</a>
                 </div>
             </div>
          </form>
