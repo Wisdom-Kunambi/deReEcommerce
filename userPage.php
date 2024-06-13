@@ -1,9 +1,9 @@
-<?php 
+<?php
 @include 'config.php';
 
 session_start();
 
-if(!isset($_SESSION['user_name'])){
+if (!isset($_SESSION['user_name'])) {
     header('location:login.php');
 }
 ?>
@@ -19,11 +19,11 @@ if(!isset($_SESSION['user_name'])){
     <link rel="stylesheet" href="src/style/styleDashboard.css">
 
     <!-- for View Product -->
-     <!-- font awesome cdn link  -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-<!-- custom css file link  -->
-<link rel="stylesheet" href="src/style/styleProducts.css">
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="src/style/styleProducts.css">
 
 </head>
 
@@ -89,64 +89,83 @@ if(!isset($_SESSION['user_name'])){
 
             <div id="viewProduct" class="detail-content px-3 pt-4">
 
-
 <?php
 @include 'configProduct.php';
 
-if(isset($message)){
-   foreach($message as $message){
-      echo '<span class="messageProduct">'.$message.'</span>';
-   }
+if (isset($_POST['add_order'])) {
+    $product_name = $_POST['product_name'];
+    $product_price = $_POST['product_price'];
+
+    if (empty($product_name) || empty($product_price)) {
+        $message[] = 'Please fill out all fields';
+    } else {
+        // Use prepared statements to prevent SQL injection
+        $stmt = $conn->prepare("INSERT INTO orders (product_name, product_price) SELECT name, price FROM products WHERE name = ? AND price = ?");
+        $stmt->bind_param("ss", $product_name, $product_price);
+
+        if ($stmt->execute()) {
+            $message[] = 'Added successfully!';
+        } else {
+            $message[] = 'Failed to add order: ' . $stmt->error;
+        }
+
+        $stmt->close();
+    }
 }
-
 ?>
-   
+
+<?php
+if (isset($message)) {
+    foreach ($message as $msg) {
+        echo '<span class="messageProduct">' . htmlspecialchars($msg) . '</span>';
+    }
+}
+?>
+
 <div class="containerProduct">
-
-   <div class="admin-product-form-container">
-
-   <?php
-
-   $select = mysqli_query($conn, "SELECT * FROM products");
-   
-   ?>
-   <div class="product-display">
-      <table class="product-display-table">
-         <thead>
-         <tr>
-            <th>product image</th>
-            <th>product name</th>
-            <th>product price</th>
-            <th>request</th>
-         </tr>
-         </thead>
-         <?php while($row = mysqli_fetch_assoc($select)){ ?>
-         <tr>
-            <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
-            <td><?php echo $row['name']; ?></td>
-            <td>$<?php echo $row['price']; ?>/-</td>
-            <td>
-               <a href="crudFiles/forProduct/.php?edit=<?php echo $row['id']; ?>" class="btn btn-success"> <i class="fas fa-edit"></i> Order </a>
-            </td>
-         </tr>
-      <?php } ?>
-      </table>
-   </div>
-
+    <div class="admin-product-form-container">
+        <?php
+        $select = $conn->query("SELECT * FROM products");
+        ?>
+        <div class="product-display">
+            <table class="product-display-table">
+                <thead>
+                    <tr>
+                        <th>Product Image</th>
+                        <th>Product Name</th>
+                        <th>Product Price</th>
+                        <th>Request</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $select->fetch_assoc()) { ?>
+                        <tr>
+                            <td><img src="uploaded_img/<?php echo htmlspecialchars($row['image']); ?>" height="100" alt=""></td>
+                            <td><?php echo htmlspecialchars($row['name']); ?></td>
+                            <td>$<?php echo htmlspecialchars($row['price']); ?>/-</td>
+                            <td>
+                                <form method="post" action="">
+                                    <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($row['name']); ?>">
+                                    <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($row['price']); ?>">
+                                    <button type="submit" name="add_order" class="btn btn-success"><i class="fas fa-edit"></i> Order</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </div>
 
 
-
-
-            </div>
-
-           
-
+            
         </div>
     </div>
-    <!-- partial -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
-    <script src="src/script/script.js"></script>
+        <!-- partial -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+        <script src="src/script/script.js"></script>
 
 </body>
 
