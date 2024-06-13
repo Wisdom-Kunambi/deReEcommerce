@@ -18,6 +18,13 @@ if(!isset($_SESSION['user_name'])){
     <link rel='stylesheet' href='https://pro.fontawesome.com/releases/v5.10.0/css/all.css'>
     <link rel="stylesheet" href="src/style/styleDashboard.css">
 
+    <!-- for View Product -->
+     <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- custom css file link  -->
+<link rel="stylesheet" href="src/style/styleProducts.css">
+
 </head>
 
 <body>
@@ -31,9 +38,9 @@ if(!isset($_SESSION['user_name'])){
 
             <ul class="list-unstyled px-2">
                 <li class="active" data-target="#dashboard"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-home"></i> Dashboard</a></li>
-                <li class="" data-target="#users"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-box-open"></i>
+                <li class="" data-target="#viewProduct"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-box-open"></i>
                         View Product</a></li>
-                <li class="" data-target="#drivers"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-shopping-cart"></i>
+                <li class="" data-target="#requestProduct"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-shopping-cart"></i>
                         Request Product</a></li>
 
             </ul>
@@ -77,6 +84,59 @@ if(!isset($_SESSION['user_name'])){
 
                     </div>
                 </div>
+
+            </div>
+
+            <div id="viewProduct" class="detail-content px-3 pt-4">
+
+
+<?php
+@include 'configProduct.php';
+
+if(isset($message)){
+   foreach($message as $message){
+      echo '<span class="messageProduct">'.$message.'</span>';
+   }
+}
+
+?>
+   
+<div class="containerProduct">
+
+   <div class="admin-product-form-container">
+
+   <?php
+
+   $select = mysqli_query($conn, "SELECT * FROM products");
+   
+   ?>
+   <div class="product-display">
+      <table class="product-display-table">
+         <thead>
+         <tr>
+            <th>product image</th>
+            <th>product name</th>
+            <th>product price</th>
+            <th>request</th>
+         </tr>
+         </thead>
+         <?php while($row = mysqli_fetch_assoc($select)){ ?>
+         <tr>
+            <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
+            <td><?php echo $row['name']; ?></td>
+            <td>$<?php echo $row['price']; ?>/-</td>
+            <td>
+               <a href="crudFiles/forProduct/.php?edit=<?php echo $row['id']; ?>" class="btn btn-success"> <i class="fas fa-edit"></i> Order </a>
+            </td>
+         </tr>
+      <?php } ?>
+      </table>
+   </div>
+
+</div>
+
+
+
 
             </div>
 
