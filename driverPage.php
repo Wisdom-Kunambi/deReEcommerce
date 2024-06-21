@@ -13,7 +13,7 @@ if(!isset($_SESSION['driver_name'])){
 
 <head>
     <meta charset="UTF-8">
-    <title>User Page</title>
+    <title>Driver Page</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://pro.fontawesome.com/releases/v5.10.0/css/all.css'>
     <link rel="stylesheet" href="src/style/styleDashboard.css">
@@ -39,7 +39,7 @@ if(!isset($_SESSION['driver_name'])){
             <ul class="list-unstyled px-2">
                 <li class="active" data-target="#dashboard"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-home"></i> Dashboard</a></li>
                 <li class="" data-target="#acceptOrder"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-box-open"></i>
-                        Accept Order</a></li>
+                        Trip Order</a></li>
 
             </ul>
 
