@@ -276,7 +276,7 @@ if (!isset($_SESSION['admin_name'])) {
                     $product_price = $_POST['product_price'];
                     $product_image = $_FILES['product_image']['name'];
                     $product_image_tmp_name = $_FILES['product_image']['tmp_name'];
-                    $product_image_folder = 'uploaded_img/' . $product_image;
+                    $product_image_folder = 'uploads/' . $product_image;
 
                     if (empty($product_name) || empty($product_price) || empty($product_image)) {
                         $message[] = 'please fill out all';
@@ -343,7 +343,7 @@ if (!isset($_SESSION['admin_name'])) {
                             </thead>
                             <?php while ($row = mysqli_fetch_assoc($select)) { ?>
                                 <tr>
-                                    <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
+                                    <td><img src="uploads/<?php echo $row['image']; ?>" height="100" alt=""></td>
                                     <td><?php echo $row['name']; ?></td>
                                     <td>$<?php echo $row['price']; ?>/-</td>
                                     <td>
